@@ -1,0 +1,53 @@
+name: Deploy Nginx to Oracle VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH for Deployment
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      # Step 3: Add the VM Host to Known Hosts
+      - name: Add VM to known hosts
+        run: ssh-keyscan -H 140.245.56.252 >> ~/.ssh/known_hosts
+
+      # Step 4: Sync Nginx Files to VM
+      - name: Deploy Nginx Configuration
+        run: |
+          ssh ubuntu@140.245.56.252 << 'EOF'
+          echo "Navigating to Nginx directory..."
+          cd /home/ubuntu/website-nginx
+
+          echo "Pulling latest changes..."
+          git pull origin main
+
+          echo "Ensuring correct network exists..."
+          docker network create backend_network || true
+          docker network create frontend_network || true
+
+          echo "Rebuilding Nginx container..."
+          docker compose down
+          docker compose up -d --build
+          EOF
+
+      # Step 5: Verify Deployment
+      - name: Verify Nginx Deployment
+        run: |
+          ssh ubuntu@140.245.56.252 << 'EOF'
+          echo "Checking Nginx status..."
+          docker ps
+          docker logs nginx
+          EOF
