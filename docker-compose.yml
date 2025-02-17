@@ -11,6 +11,8 @@ services:
       - ./frontend.conf:/etc/nginx/conf.d/frontend.conf:ro
       - ./backend.conf:/etc/nginx/conf.d/backend.conf:ro
       - ./certbot:/etc/letsencrypt  # SSL storage (optional)
+      - /etc/ssl/certs/selfsigned.crt:/etc/ssl/certs/selfsigned.crt:ro
+      - /etc/ssl/private/selfsigned.key:/etc/ssl/private/selfsigned.key:ro
     networks:
       - frontend_network
       - backend_network
