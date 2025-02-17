@@ -1,0 +1,22 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend.conf:/etc/nginx/conf.d/frontend.conf:ro
+      - ./backend.conf:/etc/nginx/conf.d/backend.conf:ro
+      - ./certbot:/etc/letsencrypt  # SSL storage (optional)
+    networks:
+      - frontend_network
+      - backend_network
+
+networks:
+  frontend_network:
+    external: true
+  backend_network:
+    external: true
