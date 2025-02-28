@@ -31,3 +31,7 @@ networks:
     external: true
   backend_network:
     external: true
+
+volumes:
+  letsencrypt_challenges:
+    # This creates a local Docker volume for the Let's Encrypt challenges
