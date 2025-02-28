@@ -8,7 +8,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - letsencrypt_challenges:/var/www/letsencrypt/.well-known/acme-challenge  # Mount challenges to a different path
+      - letsencrypt_challenges:/var/www/letsencrypt/.well-known/acme-challenge  # Shared challenge volume
       - ./certbot:/etc/letsencrypt  # SSL storage for Let's Encrypt
       - /etc/ssl/certs/selfsigned.crt:/etc/ssl/certs/selfsigned.crt:ro
       - /etc/ssl/private/selfsigned.key:/etc/ssl/private/selfsigned.key:ro
@@ -16,12 +16,14 @@ services:
     networks:
       - frontend_network
       - backend_network
+    depends_on:
+      - certbot  # Ensure Certbot runs before Nginx
 
   certbot:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - letsencrypt_challenges:/var/www/letsencrypt/.well-known/acme-challenge  # Use the same path here
+      - letsencrypt_challenges:/var/www/letsencrypt/.well-known/acme-challenge  # Shared challenge directory
       - ./certbot:/etc/letsencrypt  # Store SSL certificates
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/letsencrypt --quiet; sleep 12h & wait $${!}; done'"
     restart: always  # Ensures automatic SSL renewal
