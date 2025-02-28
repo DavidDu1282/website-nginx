@@ -8,8 +8,8 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./certbot:/etc/letsencrypt  # Let's Encrypt storage
-      - ./letsencrypt:/usr/share/nginx/html/.well-known/acme-challenge  # Certbot challenge directory
+      - letsencrypt_challenges:/usr/share/nginx/html/.well-known/acme-challenge  # Certbot challenges volume
+      - ./certbot:/etc/letsencrypt  # SSL storage for Let's Encrypt
       - /etc/ssl/certs/selfsigned.crt:/etc/ssl/certs/selfsigned.crt:ro
       - /etc/ssl/private/selfsigned.key:/etc/ssl/private/selfsigned.key:ro
       - /home/ubuntu/fortune-telling-website:/usr/share/nginx/html:ro
@@ -21,10 +21,13 @@ services:
     image: certbot/certbot
     container_name: certbot
     volumes:
+      - letsencrypt_challenges:/usr/share/nginx/html/.well-known/acme-challenge  # Shared challenge directory
       - ./certbot:/etc/letsencrypt  # Store SSL certificates
-      - ./letsencrypt:/usr/share/nginx/html/.well-known/acme-challenge  # Challenge files
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /usr/share/nginx/html --quiet; sleep 12h & wait $${!}; done'"
-    restart: always  # Auto-renew SSL certificates
+    restart: always  # Ensures automatic SSL renewal
+
+volumes:
+  letsencrypt_challenges:  # Named Docker volume to persist challenges
 
 networks:
   frontend_network:
