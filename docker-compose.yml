@@ -104,12 +104,15 @@ services:
     volumes:
       - letsencrypt-webroot:/var/www/letsencrypt
       - letsencrypt-certs:/etc/letsencrypt
-    command: >
-      sh -c "certbot certonly --webroot --webroot-path=/var/www/letsencrypt --email moderatelyburnedpotato@gmail.com --agree-tos --no-eff-email -d hao123.ddns.net --non-interactive &&
-              while true; do
-                certbot renew --webroot --webroot-path=/var/www/letsencrypt --deploy-hook 'nginx -s reload' --quiet &&
-                sleep 12h;
-              done"
+    command: >-
+      sh -c "certbot certonly --webroot --webroot-path=/var/www/letsencrypt \
+        --email moderatelyburnedpotato@gmail.com --agree-tos --no-eff-email \
+        -d hao123.ddns.net --non-interactive && \
+        while true; do \
+          certbot renew --webroot --webroot-path=/var/www/letsencrypt \
+            --deploy-hook 'nginx -s reload' --quiet && \
+          sleep 12h; \
+        done"
     networks:   #certbot needs network access to talk to letsencrypt
       - frontend_network
 
