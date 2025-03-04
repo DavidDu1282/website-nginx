@@ -90,9 +90,9 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - letsencrypt-webroot:/var/www/letsencrypt
       - letsencrypt-certs:/etc/letsencrypt
-      - /etc/ssl/certs/selfsigned.crt:/etc/ssl/certs/selfsigned.crt:ro  # Keep for fallback
-      - /etc/ssl/private/selfsigned.key:/etc/ssl/private/selfsigned.key:ro  # Keep for fallback
-      - /home/ubuntu/fortune-telling-website:/usr/share/nginx/html:ro  # Corrected path
+      - /etc/ssl/certs/selfsigned.crt:/etc/ssl/certs/selfsigned.crt:ro
+      - /etc/ssl/private/selfsigned.key:/etc/ssl/private/selfsigned.key:ro
+      - /home/ubuntu/fortune-telling-website:/usr/share/nginx/html:ro
     networks:
       - frontend_network
       - backend_network
@@ -100,19 +100,22 @@ services:
   certbot:
     image: certbot/certbot
     container_name: certbot
-    restart: unless-stopped  # VERY IMPORTANT for renewals
+    restart: unless-stopped
     volumes:
       - letsencrypt-webroot:/var/www/letsencrypt
       - letsencrypt-certs:/etc/letsencrypt
-    command: |
-      certbot certonly --webroot --webroot-path=/var/www/letsencrypt \
-        --email moderatelyburnedpotato@gmail.com --agree-tos --no-eff-email \
-        -d hao123.ddns.net --non-interactive; \
-      while true; do \
-        certbot renew --webroot --webroot-path=/var/www/letsencrypt \
-          --deploy-hook "nginx -s reload" --quiet; \
-        sleep 12h; \
-      done
+    command:
+      - /bin/sh
+      - -c
+      - |
+        certbot certonly --webroot --webroot-path=/var/www/letsencrypt \
+          --email moderatelyburnedpotato@gmail.com --agree-tos --no-eff-email \
+          -d hao123.ddns.net --non-interactive; \
+        while true; do \
+          certbot renew --webroot --webroot-path=/var/www/letsencrypt \
+            --deploy-hook "nginx -s reload" --quiet; \
+          sleep 12h; \
+        done
     networks:
       - frontend_network
 
