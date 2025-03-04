@@ -105,7 +105,7 @@ services:
       - letsencrypt-webroot:/var/www/letsencrypt
       - letsencrypt-certs:/etc/letsencrypt
       - ./certbot-entrypoint.sh:/certbot-entrypoint.sh
-    command: /certbot-entrypoint.sh
+    entrypoint: /certbot-entrypoint.sh
     networks:
       - frontend_network
 
