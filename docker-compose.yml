@@ -79,7 +79,7 @@
 
 
 ## Original Docker Compose File
-name: hao123.ddns.net
+# name: hao123.ddns.net
 services:
   nginx:
     image: nginx:latest
