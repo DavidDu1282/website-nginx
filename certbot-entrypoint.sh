@@ -2,17 +2,25 @@
 
 echo "certbot-entrypoint.sh started"  # Know the script is running
 
+# Validate environment variables
+if [ -z "$DOMAIN" ] || [ -z "$EMAIL" ]; then
+  echo "ERROR: DOMAIN and EMAIL environment variables must be set"
+  exit 1
+fi
+
+echo "Configuration: DOMAIN=$DOMAIN, EMAIL=$EMAIL"
+
 # Initial certificate request (only runs once, unless the cert is missing)
-if [ ! -f /etc/letsencrypt/live/hao123.ddns.net/fullchain.pem ]; then
+if [ ! -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then
   echo "Certificate file not found, requesting a new one..."
 
   certbot certonly --webroot --webroot-path=/var/www/letsencrypt \
-    --email moderatelyburnedpotato@gmail.com --agree-tos --no-eff-email \
-    -d hao123.ddns.net --non-interactive
+    --email $EMAIL --agree-tos --no-eff-email \
+    -d $DOMAIN --non-interactive
 
   echo "certbot certonly command finished.  Exit code: $?"  # Check the exit code
 
-  if [ -f /etc/letsencrypt/live/hao123.ddns.net/fullchain.pem ]; then
+  if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then
     echo "Certificate file created successfully."
   else
     echo "ERROR: Certificate file was NOT created."
