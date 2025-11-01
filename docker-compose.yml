@@ -29,6 +29,7 @@ services:
       - ./certbot-entrypoint.sh:/certbot-entrypoint.sh
       - ./reload-nginx.sh:/reload-nginx.sh
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./.env:/.env:ro
     entrypoint: /certbot-entrypoint.sh
     networks:
       - frontend_network
