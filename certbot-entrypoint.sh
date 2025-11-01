@@ -22,6 +22,16 @@ if [ ! -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then
 
   if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then
     echo "Certificate file created successfully."
+
+    # Automatically restart nginx to switch to SSL configuration
+    echo "Restarting nginx to enable SSL..."
+    docker restart nginx
+
+    if [ $? -eq 0 ]; then
+      echo "Nginx restarted successfully with SSL configuration"
+    else
+      echo "ERROR: Failed to restart nginx"
+    fi
   else
     echo "ERROR: Certificate file was NOT created."
   fi

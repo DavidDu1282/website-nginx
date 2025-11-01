@@ -9,7 +9,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./${NGINX_CONFIG_FILE:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./nginx.conf:/etc/nginx/configs/nginx.conf:ro
+      - ./nginx_initial.conf:/etc/nginx/configs/nginx_initial.conf:ro
+      - ./nginx-entrypoint.sh:/nginx-entrypoint.sh:ro
       - letsencrypt-webroot:/var/www/letsencrypt
       - letsencrypt-certs:/etc/letsencrypt
       - ${WEBSITE_PATH:-/home/ubuntu/fortune-telling-website}:/usr/share/nginx/html:ro
@@ -18,6 +20,7 @@ services:
       - backend_network
     environment:
       - DOMAIN=${DOMAIN}
+    entrypoint: /nginx-entrypoint.sh
 
   certbot:
     image: certbot/certbot
