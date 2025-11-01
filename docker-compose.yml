@@ -24,12 +24,11 @@ services:
     container_name: certbot
     restart: unless-stopped
     volumes:
-      - letsencrypt-webroot:/var/www/letsencrypt
+      - letsencrypt-webroot:/var/www/letsencryptAre you 
       - letsencrypt-certs:/etc/letsencrypt
       - ./certbot-entrypoint.sh:/certbot-entrypoint.sh
       - ./reload-nginx.sh:/reload-nginx.sh
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./.env:/.env:ro
     entrypoint: /certbot-entrypoint.sh
     networks:
       - frontend_network

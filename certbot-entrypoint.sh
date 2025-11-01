@@ -2,9 +2,6 @@
 
 echo "certbot-entrypoint.sh started"  # Know the script is running
 
-# Load environment variables
-source .env
-
 # Validate environment variables
 if [ -z "$DOMAIN" ] || [ -z "$EMAIL" ]; then
   echo "ERROR: DOMAIN and EMAIL environment variables must be set"
