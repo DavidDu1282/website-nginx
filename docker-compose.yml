@@ -20,7 +20,7 @@ services:
       - DOMAIN=${DOMAIN}
 
   certbot:
-    image: certbot/docker-certbot
+    image: certbot/certbot
     container_name: certbot
     restart: unless-stopped
     volumes:
