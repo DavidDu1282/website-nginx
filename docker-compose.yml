@@ -91,11 +91,11 @@ services:
     volumes:
       # - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx_initial.conf:/etc/nginx/nginx.conf:ro
-      - letsencrypt-webroot:/var/www/letsencrypt
-      - letsencrypt-certs:/etc/letsencrypt
-      - /etc/ssl/certs/selfsigned.crt:/etc/ssl/certs/selfsigned.crt:ro
-      - /etc/ssl/private/selfsigned.key:/etc/ssl/private/selfsigned.key:ro
-      - /home/ubuntu/fortune-telling-website:/usr/share/nginx/html:ro
+      # - letsencrypt-webroot:/var/www/letsencrypt
+      # - letsencrypt-certs:/etc/letsencrypt
+      # - /etc/ssl/certs/selfsigned.crt:/etc/ssl/certs/selfsigned.crt:ro
+      # - /etc/ssl/private/selfsigned.key:/etc/ssl/private/selfsigned.key:ro
+      # - /home/ubuntu/fortune-telling-website:/usr/share/nginx/html:ro
     networks:
       - frontend_network
       - backend_network
