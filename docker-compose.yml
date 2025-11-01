@@ -24,7 +24,7 @@ services:
     container_name: certbot
     restart: unless-stopped
     volumes:
-      - letsencrypt-webroot:/var/www/letsencryptAre you 
+      - letsencrypt-webroot:/var/www/letsencrypt
       - letsencrypt-certs:/etc/letsencrypt
       - ./certbot-entrypoint.sh:/certbot-entrypoint.sh
       - ./reload-nginx.sh:/reload-nginx.sh
