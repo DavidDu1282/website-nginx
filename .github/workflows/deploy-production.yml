@@ -39,6 +39,8 @@ jobs:
           rsync -avz --delete \
             --exclude '.git' \
             --exclude '.github' \
+            --exclude 'certbot' \
+            --exclude 'letsencrypt' \
             -e "ssh" \
             ./ ${{ env.VM_USER }}@${{ env.VM_IP }}:~/website-nginx/
 
