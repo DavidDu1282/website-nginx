@@ -10,8 +10,8 @@ on:
       - main
 
 env:
-  VM_IP: 8.209.197.233
-  VM_USER: david
+  VM_IP: 140.245.46.198
+  VM_USER: ubuntu
 
 jobs:
   deploy:
