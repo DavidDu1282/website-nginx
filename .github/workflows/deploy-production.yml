@@ -10,7 +10,7 @@ on:
       - main
 
 env:
-  VM_IP: 140.245.46.198
+  VM_IP: 140.245.42.119
   VM_USER: ubuntu
 
 jobs:
