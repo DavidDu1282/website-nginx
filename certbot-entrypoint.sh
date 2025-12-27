@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Install docker-cli if missing (needed for restarting nginx)
+if ! command -v docker > /dev/null 2>&1; then
+    echo "Docker CLI not found, installing..."
+    apk add --no-cache docker-cli
+fi
+
 echo "certbot-entrypoint.sh started"  # Know the script is running
 
 # Validate environment variables
@@ -39,6 +45,8 @@ if [ ! -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then
 else
   echo "Certificate file found, skipping initial request."
 fi
+
+
 
 echo "Entering renewal loop..."
 
