@@ -54,6 +54,7 @@ jobs:
           echo "Ensuring correct network exists..."
           docker network create backend_network || true
           docker network create frontend_network || true
+          docker network create stock_analysis_network || true
 
           echo "Rebuilding Nginx container..."
           docker compose down

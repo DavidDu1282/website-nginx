@@ -18,6 +18,7 @@ services:
     networks:
       - frontend_network
       - backend_network
+      - stock_analysis_network
     environment:
       - DOMAIN=${DOMAIN}
     entrypoint: /nginx-entrypoint.sh
@@ -44,25 +45,10 @@ networks:
     external: true
   backend_network:
     external: true
+  stock_analysis_network:
+    external: true
+
 
 volumes:
   letsencrypt-webroot:
   letsencrypt-certs:
-
-# ## Local Docker Compose File for Development (doesn't work)
-# services:
-#   nginx:
-#     image: nginx:latest
-#     container_name: nginx
-#     restart: always
-#     ports:
-#       - "80:80"
-#     volumes:
-#       - ./nginx.local.conf:/etc/nginx/nginx.conf:ro
-#       - D:\OtherCodingProjects\fortune-telling-website\dist:/usr/share/nginx/html:ro
-#     networks:
-#       # - frontend_network
-#       - backend_network
-# networks:
-#   backend_network:
-#     external: true
