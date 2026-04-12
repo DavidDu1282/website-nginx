@@ -6,11 +6,15 @@ set -e
 
 echo "Nginx smart entrypoint starting..."
 
-# Check if SSL certificate exists
-if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
-    echo "SSL certificate found for $DOMAIN"
-    echo "Using nginx.conf (HTTPS enabled)"
+# Check which certificates exist and select the safest config that can boot.
+if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ] && [ -f "/etc/letsencrypt/live/stocks.zuotijia.ddns.net/fullchain.pem" ]; then
+    echo "SSL certificates found for $DOMAIN and stocks.zuotijia.ddns.net"
+    echo "Using nginx.conf (full HTTPS enabled)"
     CONFIG_FILE="nginx.conf"
+elif [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
+    echo "SSL certificate found for $DOMAIN only"
+    echo "Using nginx_partial.conf (main HTTPS, stocks HTTP only)"
+    CONFIG_FILE="nginx_partial.conf"
 else
     echo "No SSL certificate found for $DOMAIN"
     echo "Using nginx_initial.conf (HTTP only for ACME challenge)"

@@ -10,6 +10,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/configs/nginx.conf:ro
+      - ./nginx_partial.conf:/etc/nginx/configs/nginx_partial.conf:ro
       - ./nginx_initial.conf:/etc/nginx/configs/nginx_initial.conf:ro
       - ./nginx-entrypoint.sh:/nginx-entrypoint.sh:ro
       - letsencrypt-webroot:/var/www/letsencrypt
